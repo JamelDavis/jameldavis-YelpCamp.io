@@ -12,30 +12,19 @@ var express     = require("express"),
     session = require("express-session"),
     seedDB      = require("./seeds"),
     methodOverride = require("method-override");
-// configure dotenv
-require('dotenv').load();
-
+    
 //requiring routes
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index")
     
-// assign mongoose promise library and connect to database
-mongoose.Promise = global.Promise;
-
-const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost/yelp_camp';
-
-mongoose.connect("mongodb+srv://koolaid:socool@cluster0-18d9c.mongodb.net/test?retryWrites=true&w=majority", { useMongoClient: true })
-      .then(() => console.log(`Database connected`))
-      .catch(err => console.log(`Database connection error: ${err.message}`));
-      
-app.use(methodOverride('_method'));
+mongoose.connect("mongodb://localhost:27017/yelp_camp_v9");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride('_method'));
 app.use(cookieParser('secret'));
-//require moment
-app.locals.moment = require('moment');
+
 // seedDB(); //seed the database
 
 // PASSPORT CONFIGURATION
@@ -64,6 +53,6 @@ app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen(3000, process.env.IP, function(){
    console.log("The YelpCamp Server Has Started!");
 });
